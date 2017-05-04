@@ -93,9 +93,9 @@ describe 'vision_mysql::server' do
     describe file('/usr/local/sbin/mysqlbackup.sh') do
       it { is_expected.to be_file }
       it { is_expected.to be_mode 700 }
-      it { is_expected.to match 'barfoo' }
-      it { is_expected.to match 'foo.*sql.bz2' }
-      it { is_expected.to match 'bar.*sql.bz2' }
+      its(:content) { is_expected.to match 'barfoo' }
+      its(:content) { is_expected.to match 'foo.*sql.bz2' }
+      its(:content) { is_expected.to match 'bar.*sql.bz2' }
     end
     describe cron do
       it { is_expected.to have_entry '10 19 * * * /usr/local/sbin/mysqlbackup.sh' }
