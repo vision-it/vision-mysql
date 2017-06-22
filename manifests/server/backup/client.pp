@@ -17,6 +17,6 @@ class vision_mysql::server::backup::client (
     backupdirgroup    => root,
     backupdatabases   => $databases,
     file_per_database => true,
-    time              => ['19', '10'],
+    time              => ['12,19', '15'],
   }
 }
