@@ -98,7 +98,8 @@ describe 'vision_mysql::server' do
       its(:content) { is_expected.to match 'bar.*sql.bz2' }
     end
     describe cron do
-      it { is_expected.to have_entry '10 19 * * * /usr/local/sbin/mysqlbackup.sh' }
+      it { is_expected.to have_entry '30 19 * * * /usr/local/sbin/mysqlbackup.sh' }
+      it { is_expected.to have_entry '30 12 * * * /usr/local/sbin/mysqlbackup.sh' }
     end
     describe package('bzip2') do
       it { is_expected.to be_installed }
