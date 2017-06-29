@@ -1,13 +1,16 @@
+# Configure regular database dumps
 #
 class vision_mysql::server::backup::client (
+
   String $password,
   Array $databases,
+
 ) {
 
-  # debian package name for bzcat util
   package { 'bzip2':
     ensure => present,
   }
+
   class { '::mysql::server::backup':
     backupuser        => 'backup',
     backuppassword    => $password,
@@ -17,6 +20,15 @@ class vision_mysql::server::backup::client (
     backupdirgroup    => root,
     backupdatabases   => $databases,
     file_per_database => true,
-    time              => ['19', '10'],
+    time              => ['19', '30'],
   }
+
+  # Puppet Module only supports one Backup currently
+  cron { 'MySQL-backup':
+    command => '/usr/local/sbin/mysqlbackup.sh',
+    user    => 'root',
+    hour    => 12,
+    minute  => 30,
+  }
+
 }
