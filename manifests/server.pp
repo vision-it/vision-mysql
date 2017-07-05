@@ -14,6 +14,7 @@
 class vision_mysql::server (
 
   String $root_password,
+  String $package_name = 'mysql-server',
 
   Hash $monitoring = {},
   Hash $backup     = {},
@@ -24,6 +25,7 @@ class vision_mysql::server (
 ) {
   class { '::mysql::server':
     root_password           => $root_password,
+    package_name            => $package_name,
     remove_default_accounts => true,
     restart                 => true,
     override_options        => {
