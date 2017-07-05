@@ -42,6 +42,14 @@ class vision_mysql::server (
         'init-connect'         => 'SET NAMES utf8',
       }
     }
+      }
+
+  # install mariadb-client alongside mariadb-server
+  # otherwise mysql will try to install mysql-client
+  if $package_name == 'mariadb-server' {
+    class { '::mysql::client':
+      package_name => 'mariadb-client',
+    }
   }
 
   if $phpmyadminserver {
