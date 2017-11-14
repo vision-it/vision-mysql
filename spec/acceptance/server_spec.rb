@@ -94,6 +94,7 @@ describe 'vision_mysql::server' do
       it { is_expected.to be_file }
       it { is_expected.to be_mode 700 }
       its(:content) { is_expected.to match 'barfoo' }
+      its(:content) { is_expected.to match 'max_allowed_packet' }
       its(:content) { is_expected.to match 'foo.*sql.bz2' }
       its(:content) { is_expected.to match 'bar.*sql.bz2' }
     end

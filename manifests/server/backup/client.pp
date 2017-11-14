@@ -21,6 +21,7 @@ class vision_mysql::server::backup::client (
     backupdatabases   => $databases,
     file_per_database => true,
     time              => ['19', '30'],
+    maxallowedpacket  => '16M',
   }
 
   # Puppet Module only supports one Backup currently
