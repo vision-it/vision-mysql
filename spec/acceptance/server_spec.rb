@@ -3,12 +3,12 @@ require 'spec_helper_acceptance'
 describe 'vision_mysql::server' do
   context 'with defaults' do
     it 'idempotentlies run' do
-      pp = <<-EOS
+      pp = <<-FILE
         class { 'vision_mysql::server':
           root_password => 'foobar',
           phpmyadmin    => {},
         }
-      EOS
+      FILE
 
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)
