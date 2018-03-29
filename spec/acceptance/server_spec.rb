@@ -24,7 +24,7 @@ describe 'vision_mysql::server' do
 
   context 'with phpmyadmin' do
     it 'exports phpmyadmin' do
-      pp = <<-EOS
+      pp = <<-FILE
         $phpmyadmin = {
           server => 'foo.bar.de',
           role   => 'spacebar'
@@ -34,7 +34,7 @@ describe 'vision_mysql::server' do
           phpmyadmin       => $phpmyadmin,
           root_password    => 'foobar',
         }
-      EOS
+      FILE
 
       apply_manifest(pp, catch_failures: true)
     end
@@ -46,7 +46,7 @@ describe 'vision_mysql::server' do
   end
   context 'with monitoring' do
     it 'creates monitoring user' do
-      pp = <<-EOS
+      pp = <<-FILE
         $monitoring = {
           password => barfoo,
         }
@@ -55,7 +55,7 @@ describe 'vision_mysql::server' do
           root_password => 'foobar',
           phpmyadmin    => {},
         }
-      EOS
+      FILE
 
       apply_manifest(pp, catch_failures: true)
     end
@@ -68,7 +68,7 @@ describe 'vision_mysql::server' do
 
   context 'with backup' do
     it 'creates backups' do
-      pp = <<-EOS
+      pp = <<-FILE
         file { '/vision':
           ensure => directory,
         }
@@ -81,7 +81,7 @@ describe 'vision_mysql::server' do
           root_password => 'foobar',
           phpmyadmin    => {},
         }
-      EOS
+      FILE
 
       apply_manifest(pp, catch_failures: true)
     end
