@@ -1,5 +1,2 @@
 ---
-vision_mysql::server::phpmyadmin:
-  role: 'foobar'
-  server: 'foobar'
 vision_mysql::server::root_password: testserver

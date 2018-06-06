@@ -1,4 +1,2 @@
 ---
-vision_mysql::server::phpmyadmin:
-   role: "%{hiera('role')}"
-   server: "%{hiera('vision_mysql::server::phpmyadminserver')}"
+vision_mysql::server: True

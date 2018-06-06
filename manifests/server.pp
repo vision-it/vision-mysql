@@ -15,12 +15,9 @@ class vision_mysql::server (
 
   String $root_password,
   String $package_name = 'mysql-server',
+  Hash   $monitoring   = {},
+  Hash   $backup        = {},
 
-  Hash $monitoring = {},
-  Hash $backup     = {},
-  Hash $phpmyadmin = {},
-
-  Optional[String] $phpmyadminserver = undef,
 
 ) {
   class { '::mysql::server':
@@ -49,13 +46,6 @@ class vision_mysql::server (
   if $package_name == 'mariadb-server' {
     class { '::mysql::client':
       package_name => 'mariadb-client',
-    }
-  }
-
-  if $phpmyadminserver {
-    class { '::vision_mysql::server::phpmyadmin::client':
-      server => $phpmyadmin['server'],
-      role   => $phpmyadmin['role'],
     }
   }
 

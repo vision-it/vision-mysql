@@ -6,7 +6,6 @@ describe 'vision_mysql::server' do
       pp = <<-FILE
         class { 'vision_mysql::server':
           root_password => 'foobar',
-          phpmyadmin    => {},
         }
       FILE
 
@@ -22,88 +21,7 @@ describe 'vision_mysql::server' do
     end
   end
 
-  context 'with phpmyadmin' do
-    it 'exports phpmyadmin' do
-      pp = <<-FILE
-        $phpmyadmin = {
-          server => 'foo.bar.de',
-          role   => 'spacebar'
-        }
-        class { 'vision_mysql::server':
-          phpmyadminserver => 'foo.bar.de',
-          phpmyadmin       => $phpmyadmin,
-          root_password    => 'foobar',
-        }
-      FILE
-
-      apply_manifest(pp, catch_failures: true)
-    end
-
-    describe command('mysql -e "select user,host from mysql.user"') do
-      its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match 'root.*foo.bar.de' }
-    end
-  end
-  context 'with monitoring' do
-    it 'creates monitoring user' do
-      pp = <<-FILE
-        $monitoring = {
-          password => barfoo,
-        }
-        class { 'vision_mysql::server':
-          monitoring    => $monitoring,
-          root_password => 'foobar',
-          phpmyadmin    => {},
-        }
-      FILE
-
-      apply_manifest(pp, catch_failures: true)
-    end
-
-    describe command('mysql -e "select user from mysql.user"') do
-      its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match 'monitoring' }
-    end
-  end
-
-  context 'with backup' do
-    it 'creates backups' do
-      pp = <<-FILE
-        file { '/vision':
-          ensure => directory,
-        }
-        $backup = {
-          password  => 'barfoo',
-          databases => ['foo', 'bar'],
-        }
-        class { 'vision_mysql::server':
-          backup        => $backup,
-          root_password => 'foobar',
-          phpmyadmin    => {},
-        }
-      FILE
-
-      apply_manifest(pp, catch_failures: true)
-    end
-
-    describe command('mysql -e "select user from mysql.user"') do
-      its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match 'backup' }
-    end
-    describe file('/usr/local/sbin/mysqlbackup.sh') do
-      it { is_expected.to be_file }
-      it { is_expected.to be_mode 700 }
-      its(:content) { is_expected.to match 'barfoo' }
-      its(:content) { is_expected.to match 'max_allowed_packet' }
-      its(:content) { is_expected.to match 'foo.*sql.bz2' }
-      its(:content) { is_expected.to match 'bar.*sql.bz2' }
-    end
-    describe cron do
-      it { is_expected.to have_entry '30 19 * * * /usr/local/sbin/mysqlbackup.sh' }
-      it { is_expected.to have_entry '30 12 * * * /usr/local/sbin/mysqlbackup.sh' }
-    end
-    describe package('bzip2') do
-      it { is_expected.to be_installed }
-    end
+  describe command('mysql -e "select user,host from mysql.user"') do
+    its(:exit_status) { is_expected.to eq 0 }
   end
 end
