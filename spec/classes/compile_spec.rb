@@ -12,20 +12,6 @@ describe 'vision_mysql::server' do
         it { is_expected.to compile }
       end
 
-      context 'without phpmyadmin' do
-        it { is_expected.not_to contain_class('vision_mysql::server::phpmyadmin::client') }
-      end
-
-      context 'with phpmyadmin' do
-        let(:params) do
-          {
-            phpmyadminserver: 'localhost'
-          }
-        end
-
-        it { is_expected.to contain_class('vision_mysql::server::phpmyadmin::client') }
-      end
-
       context 'without monitoring' do
         let(:params) do
           {

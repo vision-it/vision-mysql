@@ -6,7 +6,6 @@ describe 'vision_mysql::server' do
       pp = <<-FILE
         class { 'vision_mysql::server':
           root_password => 'foobar',
-          phpmyadmin    => {},
         }
       FILE
 
@@ -22,26 +21,8 @@ describe 'vision_mysql::server' do
     end
   end
 
-  context 'with phpmyadmin' do
-    it 'exports phpmyadmin' do
-      pp = <<-FILE
-        $phpmyadmin = {
-          server => 'foo.bar.de',
-          role   => 'spacebar'
-        }
-        class { 'vision_mysql::server':
-          phpmyadminserver => 'foo.bar.de',
-          phpmyadmin       => $phpmyadmin,
-          root_password    => 'foobar',
-        }
-      FILE
-
-      apply_manifest(pp, catch_failures: true)
-    end
-
     describe command('mysql -e "select user,host from mysql.user"') do
       its(:exit_status) { is_expected.to eq 0 }
-      its(:stdout) { is_expected.to match 'root.*foo.bar.de' }
     end
   end
   context 'with monitoring' do
@@ -53,7 +34,6 @@ describe 'vision_mysql::server' do
         class { 'vision_mysql::server':
           monitoring    => $monitoring,
           root_password => 'foobar',
-          phpmyadmin    => {},
         }
       FILE
 
@@ -79,7 +59,6 @@ describe 'vision_mysql::server' do
         class { 'vision_mysql::server':
           backup        => $backup,
           root_password => 'foobar',
-          phpmyadmin    => {},
         }
       FILE
 
@@ -106,4 +85,3 @@ describe 'vision_mysql::server' do
       it { is_expected.to be_installed }
     end
   end
-end
