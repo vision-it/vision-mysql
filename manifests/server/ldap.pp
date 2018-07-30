@@ -26,14 +26,13 @@ class vision_mysql::server::ldap (
     content => template('vision_mysql/nsswitch.conf'),
   }
 
-  if ($facts['os']['name'] == 'Debian') and ($facts['os']['release']['major'] == '8') {
-    $pam_conf = '/etc/pam_ldap.conf'
-  }
-  else {
-    $pam_conf = '/etc/libnss-ldap.conf'
+  file { '/etc/pam_ldap.conf':
+    ensure  => present,
+    path    => $pam_conf,
+    content => template('vision_mysql/pam_ldap.conf.erb'),
   }
 
-  file { 'LDAP PAM config':
+  file { '/etc/libnss-ldap.conf':
     ensure  => present,
     path    => $pam_conf,
     content => template('vision_mysql/pam_ldap.conf.erb'),
