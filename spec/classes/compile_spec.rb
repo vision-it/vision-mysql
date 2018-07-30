@@ -31,6 +31,22 @@ describe 'vision_mysql::server' do
 
         it { is_expected.not_to contain_class('vision_mysql::server::backup::client') }
       end
+      context 'with ldap' do
+        let(:params) do
+          {
+            ldap: true
+          }
+        end
+        it { is_expected.to contain_class('vision_mysql::server::ldap') }
+      end
+      context 'with tls' do
+        let(:params) do
+          {
+            tls: true
+          }
+        end
+        it { is_expected.to compile }
+      end
     end
   end
 end
