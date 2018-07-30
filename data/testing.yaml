@@ -1,2 +1,6 @@
 ---
-vision_mysql::server::root_password: testserver
+vision_mysql::server::root_password: 'testserver'
+vision_mysql::server::ldap::ldap_uri: 'ldap://uri_geller'
+vision_mysql::server::ldap::bind_dn: 'dc=foobind'
+vision_mysql::server::ldap::bind_password: 'foopassword'
+vision_mysql::server::ldap::base_dn: 'dc=foobase'
