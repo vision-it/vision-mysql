@@ -19,15 +19,11 @@ class vision_mysql::server (
   Hash   $backup       = {},
   Boolean $ldap = false,
   Boolean $tls  = false,
-  Optional['String'] $tls_cert = undef,
-  Optional['String'] $tls_key = undef,
-  Optional['String'] $ca_cert = undef,
+  Optional[String] $server_cert = undef,
+  Optional[String] $server_key = undef,
+  Optional[String] $ca_cert = undef,
 
-  ) {
-
-  if $ldap {
-    contain ::vision_mysql::server::ldap
-  }
+) {
 
   if $tls {
     file { '/etc/mysql/ca-cert.pem':
@@ -35,21 +31,23 @@ class vision_mysql::server (
       content => $ca_cert,
     }
 
-    file { '/etc/mysql/tls-key.pem':
+    file { '/etc/mysql/server-key.pem':
       ensure  => present,
-      content => $tls_key,
+      mode    => '0600',
+      content => $server_key,
     }
 
-    file { '/etc/mysql/tls-cert.pem':
+    file { '/etc/mysql/server-cert.pem':
       ensure  => present,
-      content => $tls_cert,
+      content => $server_cert,
     }
 
     $ssl_override_options = {
       'mysqld' => {
-        'ssl-ca'   => '/etc/mysq/ca-cert.pem',
-        'ssl-cert' => '/etc/mysql/tls-cert.pem',
-        'ssl-key'  => '/etc/mysql/tls-key.pem',
+        'ssl'         => true,
+        'ssl-ca'      => '/etc/mysq/ca-cert.pem',
+        'ssl-cert'    => '/etc/mysql/server-cert.pem',
+        'ssl-key'     => '/etc/mysql/server-key.pem',
       }
     }
   }
@@ -69,7 +67,9 @@ class vision_mysql::server (
       'collation-server'     => 'utf8_general_ci',
       'character-set-server' => 'utf8',
       'init-connect'         => 'SET NAMES utf8',
-
+    },
+    'mariadb' => {
+      'plugin-load'          => 'auth_pam.so'
     }
   }
 
@@ -101,4 +101,9 @@ class vision_mysql::server (
       databases => $backup['databases'],
     }
   }
+
+  if $ldap {
+    contain '::vision_mysql::server::ldap'
+  }
+
 }

@@ -44,9 +44,4 @@ class vision_mysql::server::ldap (
     content => template('vision_mysql/pam-mariadb'),
   }
 
-  mysql::plugin { 'auth_pam':
-    ensure => present,
-    soname => 'auth_pam.so',
-  }
-
 }

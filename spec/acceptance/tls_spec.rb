@@ -1,13 +1,11 @@
 require 'spec_helper_acceptance'
 
 describe 'vision_mysql::server' do
-  context 'with defaults and ldap' do
+  context 'with TLS' do
     it 'idempotentlies run' do
       pp = <<-FILE
         class { 'vision_mysql::server':
-              ldap => true,
-              tls  => false,
-              package_name => 'mariadb-server',
+              tls => true,
         }
       FILE
 
@@ -17,35 +15,33 @@ describe 'vision_mysql::server' do
   end
 
   context 'files provisioned' do
-    describe package('libpam-ldap') do
-      it { is_expected.to be_installed }
-    end
-
     describe file('/root/.my.cnf') do
       it { is_expected.to be_file }
       it { is_expected.to be_mode 600 }
     end
 
-    describe file('/etc/nsswitch.conf') do
+    describe file('/etc/mysql/ca-cert.pem') do
       it { is_expected.to be_file }
-      its(:content) { is_expected.to match 'ldap' }
+      its(:content) { is_expected.to match 'CERTIFICATE' }
     end
 
-    describe file('/etc/pam_ldap.conf') do
+    describe file('/etc/mysql/server-cert.pem') do
       it { is_expected.to be_file }
-      its(:content) { is_expected.to match 'base dc=foobase' }
-      its(:content) { is_expected.to match 'ldap_version 3' }
+      its(:content) { is_expected.to match 'CERTIFICATE' }
     end
 
-    describe file('/etc/pam.d/mariadb') do
+    describe file('/etc/mysql/server-key.pem') do
       it { is_expected.to be_file }
-      its(:content) { is_expected.to match 'auth required pam_ldap.so' }
-      its(:content) { is_expected.to match 'account required pam_ldap.so' }
+      it { is_expected.to be_mode 600 }
+      its(:content) { is_expected.to match 'PRIVATE KEY' }
     end
 
     describe file('/etc/mysql/my.cnf') do
       it { is_expected.to be_file }
-      its(:content) { is_expected.to match /^ssl = false/ }
+      its(:content) { is_expected.to match /^ssl$/ }
+      its(:content) { is_expected.to match /^ssl-ca =/ }
+      its(:content) { is_expected.to match /^ssl-cert =/ }
+      its(:content) { is_expected.to match /^ssl-key =/ }
     end
 
   end
