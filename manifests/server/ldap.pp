@@ -14,7 +14,7 @@ class vision_mysql::server::ldap (
 
   package {
     [
-      'libnss-ldapd',
+      'libnss-ldap',
       'libpam-ldap',
       'ldap-utils',
     ]:
