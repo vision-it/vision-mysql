@@ -28,13 +28,11 @@ class vision_mysql::server::ldap (
 
   file { '/etc/pam_ldap.conf':
     ensure  => present,
-    path    => $pam_conf,
     content => template('vision_mysql/pam_ldap.conf.erb'),
   }
 
   file { '/etc/libnss-ldap.conf':
     ensure  => present,
-    path    => $pam_conf,
     content => template('vision_mysql/pam_ldap.conf.erb'),
   }
 
