@@ -45,7 +45,7 @@ class vision_mysql::server (
     $ssl_override_options = {
       'mysqld' => {
         'ssl'         => true,
-        'ssl-ca'      => '/etc/mysq/ca-cert.pem',
+        'ssl-ca'      => '/etc/mysql/ca-cert.pem',
         'ssl-cert'    => '/etc/mysql/server-cert.pem',
         'ssl-key'     => '/etc/mysql/server-key.pem',
       }
