@@ -69,7 +69,8 @@ class vision_mysql::server (
       'init-connect'         => 'SET NAMES utf8',
     },
     'mariadb' => {
-      'plugin-load'          => 'auth_pam.so'
+      'plugin-load'              => 'auth_pam.so',
+      'pam_use_cleartext_plugin' => true
     }
   }
 
