@@ -10,6 +10,8 @@ class vision_mysql::mariadb (
   Boolean $ldap = false,
   Boolean $tls  = false,
   Boolean $cluster = false,
+  Boolean $service_manage = false,
+  Boolean $service_enabled = false,
   Optional[Array] $cluster_nodes,
   Optional[String] $cluster_name,
   Optional[String] $server_cert = undef,
@@ -87,6 +89,8 @@ class vision_mysql::mariadb (
     package_name            => $package_name,
     remove_default_accounts => true,
     restart                 => true,
+    service_manage          => $service_manage,
+    service_enabled         => $service_enabled,
     override_options        => deep_merge(
       $default_override_options,
       $ldap_override_options,

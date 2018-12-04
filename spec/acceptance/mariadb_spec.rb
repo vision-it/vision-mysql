@@ -12,6 +12,8 @@ describe 'vision_mysql::mariadb' do
               cluster_nodes => ['1.example.com', '2.example.com'],
               cluster_name => 'foo_bar_cluster',
               package_name => 'mariadb-server',
+              service_manage => false,
+              service_enabled => false,
         }
       FILE
 
@@ -37,9 +39,5 @@ describe 'vision_mysql::mariadb' do
       its(:content) { is_expected.to match 'wsrep_sst_method = rsync' }
       its(:content) { is_expected.to match 'wsrep_node_address' }
     end
-  end
-
-  describe command('mysql -e "select user,host from mysql.user"') do
-    its(:exit_status) { is_expected.to eq 0 }
   end
 end
