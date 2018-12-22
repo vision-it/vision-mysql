@@ -10,8 +10,6 @@ class vision_mysql::server::ldap (
 
 ) {
 
-  contain '::mysql::server'
-
   package {
     [
       'libnss-ldap',

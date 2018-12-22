@@ -23,7 +23,6 @@ describe 'vision_mysql::mariadb' do
   end
 
   context 'files provisioned' do
-
     describe file('/root/.my.cnf') do
       it { is_expected.to be_file }
       it { is_expected.to be_mode 600 }
