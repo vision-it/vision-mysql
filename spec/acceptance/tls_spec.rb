@@ -43,7 +43,6 @@ describe 'vision_mysql::server' do
       its(:content) { is_expected.to match /^ssl-cert =/ }
       its(:content) { is_expected.to match /^ssl-key =/ }
     end
-
   end
 
   describe command('mysql -e "select user,host from mysql.user"') do

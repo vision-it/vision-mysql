@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'hiera'
 
-describe 'vision_mysql::server' do
+describe 'vision_mysql::mariadb' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
@@ -10,16 +10,6 @@ describe 'vision_mysql::server' do
 
       context 'compile' do
         it { is_expected.to compile.with_all_deps }
-      end
-
-      context 'without monitoring' do
-        let(:params) do
-          {
-            monitoring: {}
-          }
-        end
-
-        it { is_expected.not_to contain_class('vision_mysql::server::monitoring::client') }
       end
 
       context 'without backup' do
@@ -31,6 +21,7 @@ describe 'vision_mysql::server' do
 
         it { is_expected.not_to contain_class('vision_mysql::server::backup::client') }
       end
+
       context 'with ldap' do
         let(:params) do
           {
@@ -39,6 +30,7 @@ describe 'vision_mysql::server' do
         end
         it { is_expected.to contain_class('vision_mysql::server::ldap') }
       end
+
       context 'with tls' do
         let(:params) do
           {

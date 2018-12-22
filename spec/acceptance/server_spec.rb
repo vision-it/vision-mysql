@@ -47,7 +47,6 @@ describe 'vision_mysql::server' do
       it { is_expected.to be_file }
       its(:content) { is_expected.to match /^ssl = false/ }
     end
-
   end
 
   describe command('mysql -e "select user,host from mysql.user"') do
