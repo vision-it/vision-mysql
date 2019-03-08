@@ -12,6 +12,7 @@ describe 'vision_mysql::server' do
           databases => ['foo', 'bar'],
         }
         class { 'vision_mysql::server':
+          package_name  => 'mysql-server',
           backup        => $backup,
           root_password => 'foobar',
         }

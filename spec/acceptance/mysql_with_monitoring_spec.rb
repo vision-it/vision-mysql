@@ -8,6 +8,7 @@ describe 'vision_mysql::server' do
           password => barfoo,
         }
         class { 'vision_mysql::server':
+          package_name  => 'mysql-server',
           monitoring    => $monitoring,
           root_password => 'foobar',
         }
