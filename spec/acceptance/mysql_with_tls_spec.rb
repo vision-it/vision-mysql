@@ -5,7 +5,8 @@ describe 'vision_mysql::server' do
     it 'idempotentlies run' do
       pp = <<-FILE
         class { 'vision_mysql::server':
-              tls => true,
+          package_name  => 'mysql-server',
+          tls => true,
         }
       FILE
 

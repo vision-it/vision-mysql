@@ -1,17 +1,17 @@
 require 'spec_helper_acceptance'
 
 describe 'vision_mysql::mariadb' do
-  context 'with defaults and cluster' do
+  context 'with cluster' do
     it 'idempotentlies run' do
       pp = <<-FILE
         class { 'vision_mysql::mariadb':
+              package_name => 'mariadb-server',
               root_password => '123456',
               ldap => false,
               tls  => false,
               cluster => true,
               cluster_nodes => ['1.example.com', '2.example.com'],
               cluster_name => 'foo_bar_cluster',
-              package_name => 'mariadb-server',
               service_manage => false,
               service_enabled => false,
         }

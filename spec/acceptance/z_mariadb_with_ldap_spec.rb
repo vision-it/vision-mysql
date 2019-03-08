@@ -1,13 +1,13 @@
 require 'spec_helper_acceptance'
 
-describe 'vision_mysql::server' do
-  context 'with defaults and ldap' do
+describe 'vision_mysql::mariadb' do
+  context 'with ldap' do
     it 'idempotentlies run' do
       pp = <<-FILE
         class { 'vision_mysql::server':
+              package_name => 'mariadb-server',
               ldap => true,
               tls  => false,
-              package_name => 'mariadb-server',
         }
       FILE
 

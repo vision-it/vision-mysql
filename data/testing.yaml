@@ -1,7 +1,5 @@
 ---
 vision_mysql::mariadb::root_password: 'foobar'
-
-vision_mysql::server::package_name: 'mariadb-server'
 vision_mysql::server::root_password: 'testserver'
 vision_mysql::server::ldap::ldap_uri: 'ldap://uri_geller'
 vision_mysql::server::ldap::bind_dn: 'dc=foobind'
