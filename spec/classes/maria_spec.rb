@@ -10,6 +10,7 @@ describe 'vision_mysql::mariadb' do
 
       context 'compile' do
         it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_class('vision_mysql::server::backup') }
       end
 
       context 'without backup' do
@@ -18,8 +19,8 @@ describe 'vision_mysql::mariadb' do
             backup: {}
           }
         end
-
-        it { is_expected.not_to contain_class('vision_mysql::server::backup::client') }
+        it { is_expected.to compile }
+        it { is_expected.not_to contain_class('vision_mysql::server::backup') }
       end
 
       context 'with ldap' do
@@ -28,6 +29,7 @@ describe 'vision_mysql::mariadb' do
             ldap: true
           }
         end
+        it { is_expected.to compile }
         it { is_expected.to contain_class('vision_mysql::server::ldap') }
       end
 
@@ -38,6 +40,7 @@ describe 'vision_mysql::mariadb' do
           }
         end
         it { is_expected.to compile }
+        it { is_expected.to contain_class('vision_mysql::server::tls') }
       end
     end
   end

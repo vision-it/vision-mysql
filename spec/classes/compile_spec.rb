@@ -10,6 +10,8 @@ describe 'vision_mysql::server' do
 
       context 'compile' do
         it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_class('vision_mysql::server::backup') }
+        it { is_expected.to contain_class('vision_mysql::server::monitoring') }
       end
 
       context 'without monitoring' do
@@ -18,8 +20,8 @@ describe 'vision_mysql::server' do
             monitoring: {}
           }
         end
-
-        it { is_expected.not_to contain_class('vision_mysql::server::monitoring::client') }
+        it { is_expected.to compile }
+        it { is_expected.not_to contain_class('vision_mysql::server::monitoring') }
       end
 
       context 'without backup' do
@@ -28,17 +30,10 @@ describe 'vision_mysql::server' do
             backup: {}
           }
         end
+        it { is_expected.to compile }
+        it { is_expected.not_to contain_class('vision_mysql::server::backup') }
+      end
 
-        it { is_expected.not_to contain_class('vision_mysql::server::backup::client') }
-      end
-      context 'with ldap' do
-        let(:params) do
-          {
-            ldap: true
-          }
-        end
-        it { is_expected.to contain_class('vision_mysql::server::ldap') }
-      end
       context 'with tls' do
         let(:params) do
           {
@@ -46,6 +41,7 @@ describe 'vision_mysql::server' do
           }
         end
         it { is_expected.to compile }
+        it { is_expected.to contain_class('vision_mysql::server::tls') }
       end
     end
   end

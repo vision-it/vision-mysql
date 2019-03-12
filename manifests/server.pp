@@ -25,36 +25,6 @@ class vision_mysql::server (
 
 ) {
 
-  if $tls {
-    file { '/etc/mysql/ca-cert.pem':
-      ensure  => present,
-      content => $ca_cert,
-    }
-
-    file { '/etc/mysql/server-key.pem':
-      ensure  => present,
-      mode    => '0600',
-      content => $server_key,
-    }
-
-    file { '/etc/mysql/server-cert.pem':
-      ensure  => present,
-      content => $server_cert,
-    }
-
-    $ssl_override_options = {
-      'mysqld' => {
-        'ssl'         => true,
-        'ssl-ca'      => '/etc/mysql/ca-cert.pem',
-        'ssl-cert'    => '/etc/mysql/server-cert.pem',
-        'ssl-key'     => '/etc/mysql/server-key.pem',
-      }
-    }
-  }
-  else {
-    $ssl_override_options = {}
-  }
-
   $default_override_options = {
     'client' => {
       'default-character-set' => 'utf8',
@@ -74,20 +44,32 @@ class vision_mysql::server (
     }
   }
 
+  if $tls {
+    class { '::vision_mysql::server::tls':
+      server_cert => $server_cert,
+      server_key  => $server_key,
+      ca_cert     => $ca_cert
+    }
+
+    $ssl_override_options = {
+      'mysqld' => {
+        'ssl'         => true,
+        'ssl-ca'      => '/etc/mysql/ca-cert.pem',
+        'ssl-cert'    => '/etc/mysql/server-cert.pem',
+        'ssl-key'     => '/etc/mysql/server-key.pem',
+      }
+    }
+  }
+  else {
+    $ssl_override_options = {}
+  }
+
   class { '::mysql::server':
     root_password           => $root_password,
     package_name            => $package_name,
     remove_default_accounts => true,
     restart                 => true,
     override_options        => deep_merge($default_override_options, $ssl_override_options),
-  }
-
-  # install mariadb-client alongside mariadb-server
-  # otherwise mysql will try to install mysql-client
-  if $package_name == 'mariadb-server' {
-    class { '::mysql::client':
-      package_name => 'mariadb-client',
-    }
   }
 
   if ! empty($monitoring) {
@@ -101,10 +83,6 @@ class vision_mysql::server (
       password  => $backup['password'],
       databases => $backup['databases'],
     }
-  }
-
-  if $ldap {
-    contain '::vision_mysql::server::ldap'
   }
 
 }

@@ -4,8 +4,7 @@ describe 'vision_mysql::mariadb' do
   context 'with ldap' do
     it 'idempotentlies run' do
       pp = <<-FILE
-        class { 'vision_mysql::server':
-              package_name => 'mariadb-server',
+        class { 'vision_mysql::mariadb':
               ldap => true,
               tls  => false,
         }

@@ -5,7 +5,6 @@ describe 'vision_mysql::mariadb' do
     it 'idempotentlies run' do
       pp = <<-FILE
         class { 'vision_mysql::mariadb':
-              package_name => 'mariadb-server',
               root_password => '123456',
               ldap => false,
               tls  => false,
