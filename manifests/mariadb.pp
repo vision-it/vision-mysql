@@ -104,7 +104,7 @@ class vision_mysql::mariadb (
   }
 
   if ! empty($backup) {
-    class { '::vision_mysql::server::backup::client':
+    class { '::vision_mysql::server::backup':
       password  => $backup['password'],
       databases => $backup['databases'],
     }

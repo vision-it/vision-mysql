@@ -1,5 +1,5 @@
 #
-class vision_mysql::server::monitoring::client(
+class vision_mysql::server::monitoring (
   String $password,
 ) {
 
