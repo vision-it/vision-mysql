@@ -1,6 +1,9 @@
+# Add monitoring user
 #
-class vision_mysql::server::monitoring::client(
+class vision_mysql::server::monitoring (
+
   String $password,
+
 ) {
 
   mysql_user { 'monitoring@localhost':
@@ -13,4 +16,5 @@ class vision_mysql::server::monitoring::client(
     user       => 'monitoring@localhost',
     table      => '*.*',
   }
+
 }
