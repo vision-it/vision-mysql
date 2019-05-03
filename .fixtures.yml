@@ -4,6 +4,9 @@ fixtures:
     stdlib:
       ref: "4.24.0"
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib"
+    apt:
+      ref: "5.0.1"
+      repo: "https://github.com/puppetlabs/puppetlabs-apt"
     mysql:
       ref: "8.0.0"
       repo: "https://github.com/puppetlabs/puppetlabs-mysql"

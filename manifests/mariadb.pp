@@ -10,6 +10,7 @@ class vision_mysql::mariadb (
   Boolean $ldap = false,
   Boolean $tls  = false,
   Boolean $cluster = false,
+  Boolean $manage_repo = false,
   Boolean $service_manage  = false,
   Boolean $service_enabled = false,
   Optional[Array] $cluster_nodes = undef,
@@ -19,6 +20,10 @@ class vision_mysql::mariadb (
   Optional[String] $ca_cert = undef,
 
 ) {
+
+  if $manage_repo {
+    contain vision_mysql::repo::mariadb
+  }
 
   # Empty for future use such as chars sets.
   $default_override_options = {}

@@ -19,11 +19,16 @@ class vision_mysql::server (
   Hash   $backup       = {},
   Boolean $ldap = false,
   Boolean $tls  = false,
+  Boolean $manage_repo = false,
   Optional[String] $server_cert = undef,
   Optional[String] $server_key = undef,
   Optional[String] $ca_cert = undef,
 
 ) {
+
+  if $manage_repo {
+    contain vision_mysql::repo::mysql
+  }
 
   $default_override_options = {
     'client' => {
