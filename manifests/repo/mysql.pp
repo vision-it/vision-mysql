@@ -20,7 +20,7 @@ class vision_mysql::repo::mysql (
   contain apt
 
   $location = 'http://repo.mysql.com/apt/debian/'
-  $key_id = 'A4A9406876FCBD3C456770C88C718D3B5072E1F5'
+  $key_id = '5072E1F5'
   $key_server = 'hkp://pgp.mit.edu'
 
   apt::source { 'mysql':
