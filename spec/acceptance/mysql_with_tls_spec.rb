@@ -23,17 +23,20 @@ describe 'vision_mysql::server' do
 
     describe file('/etc/mysql/ca-cert.pem') do
       it { is_expected.to be_file }
+      it { is_expected.to be_owned_by 'mysql' }
       its(:content) { is_expected.to match 'CERTIFICATE' }
     end
 
     describe file('/etc/mysql/server-cert.pem') do
       it { is_expected.to be_file }
+      it { is_expected.to be_owned_by 'mysql' }
       its(:content) { is_expected.to match 'CERTIFICATE' }
     end
 
     describe file('/etc/mysql/server-key.pem') do
       it { is_expected.to be_file }
       it { is_expected.to be_mode 600 }
+      it { is_expected.to be_owned_by 'mysql' }
       its(:content) { is_expected.to match 'PRIVATE KEY' }
     end
 
