@@ -25,8 +25,9 @@ class vision_mysql::mariadb (
     contain vision_mysql::repo::mariadb
   }
 
-  # Empty for future use such as chars sets.
-  $default_override_options = {}
+  $default_override_options = {
+    'bind-address' => '0.0.0.0',
+  }
 
   if $tls {
     class { '::vision_mysql::server::tls':
