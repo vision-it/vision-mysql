@@ -38,7 +38,7 @@ class vision_mysql::server (
       'default-character-set' => 'utf8',
     },
     'mysqld' => {
-      'sql-mode'             => 'ONLY_FULL_GROUP_BY,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
+      'sql-mode'             => 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
       'bind-address'         => '0.0.0.0',
       'collation-server'     => 'utf8_general_ci',
       'character-set-server' => 'utf8',
