@@ -26,7 +26,9 @@ class vision_mysql::mariadb (
   }
 
   $default_override_options = {
-    'bind-address' => '0.0.0.0',
+    'mysqld' => {
+      'bind-address' => '0.0.0.0',
+    }
   }
 
   if $tls {
