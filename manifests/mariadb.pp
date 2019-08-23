@@ -28,6 +28,7 @@ class vision_mysql::mariadb (
   $default_override_options = {
     'mysqld' => {
       'bind-address' => '0.0.0.0',
+      'sql-mode'     => 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
     }
   }
 
