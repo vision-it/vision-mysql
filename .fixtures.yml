@@ -7,6 +7,9 @@ fixtures:
     apt:
       ref: "5.0.1"
       repo: "https://github.com/puppetlabs/puppetlabs-apt"
+    cron_core:
+      ref: "1.0.2"
+      repo: "https://github.com/puppetlabs/puppetlabs-cron_core"
     mysql:
       ref: "8.0.0"
       repo: "https://github.com/puppetlabs/puppetlabs-mysql"
