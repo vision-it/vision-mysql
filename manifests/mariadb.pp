@@ -74,6 +74,7 @@ class vision_mysql::mariadb (
         'wsrep_cluster_address'    => "gcomm://${ $cluster_nodes.join(',') }",
         'wsrep_sst_method'         => 'rsync',
         'wsrep_node_address'       => $ipaddress,
+        'wsrep_replicate_myisam'   => 'ON',
         'binlog_format'            => 'ROW',
         'default_storage_engine'   => 'innodb',
         'innodb_autoinc_lock_mode' => '2',
