@@ -100,6 +100,12 @@ class vision_mysql::mariadb (
       )
   }
 
+  file { '/etc/logrotate.d/mysql-server':
+    ensure  => present,
+    content => template('vision_mysql/mysql-server.logrotate'),
+    require => Class['::mysql::server'],
+  }
+
   class { '::mysql::client':
     package_name => 'mariadb-client'
   }
