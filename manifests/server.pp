@@ -78,6 +78,12 @@ class vision_mysql::server (
     override_options        => deep_merge($default_override_options, $ssl_override_options),
   }
 
+  file { '/etc/logrotate.d/mysql-server':
+    ensure  => present,
+    content => template('vision_mysql/mysql-server.logrotate'),
+    require => Class['::mysql::server'],
+  }
+
   if ! empty($monitoring) {
     class { '::vision_mysql::server::monitoring':
       password => $monitoring['password'],
