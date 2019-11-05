@@ -13,6 +13,7 @@ class vision_mysql::mariadb (
   Boolean $manage_repo = false,
   Boolean $service_manage  = false,
   Boolean $service_enabled = false,
+  Optional[String] $monitoring_password = undef,
   Optional[Array] $cluster_nodes = undef,
   Optional[String] $cluster_name = undef,
   Optional[String] $server_cert = undef,
@@ -114,6 +115,12 @@ class vision_mysql::mariadb (
     class { '::vision_mysql::server::backup':
       password  => $backup['password'],
       databases => $backup['databases']
+    }
+  }
+
+  if $monitoring_password {
+    class { '::vision_mysql::server::monitoring':
+      password => $monitoring_password,
     }
   }
 }
