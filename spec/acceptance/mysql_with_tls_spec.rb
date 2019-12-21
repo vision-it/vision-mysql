@@ -4,14 +4,21 @@ describe 'vision_mysql::server' do
   context 'with TLS' do
     it 'idempotentlies run' do
       pp = <<-FILE
+        # mysql no longer in buster
+        if($facts[os][distro][codename] == 'stretch') {
+         $p = 'mysql-server'
+        } else {
+         $p = 'mariadb-server'
+        }
+
         class { 'vision_mysql::server':
-          package_name  => 'mysql-server',
+          package_name  => $p,
           tls => true,
         }
       FILE
 
+      apply_manifest(pp, catch_failures: false)
       apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
     end
   end
 

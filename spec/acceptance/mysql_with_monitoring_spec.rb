@@ -4,11 +4,18 @@ describe 'vision_mysql::server' do
   context 'with monitoring' do
     it 'creates monitoring user' do
       pp = <<-FILE
+        # mysql no longer in buster
+        if($facts[os][distro][codename] == 'stretch') {
+         $p = 'mysql-server'
+        } else {
+         $p = 'mariadb-server'
+        }
+
         $monitoring = {
           password => barfoo,
         }
         class { 'vision_mysql::server':
-          package_name  => 'mysql-server',
+          package_name  => $p,
           monitoring    => $monitoring,
           root_password => 'foobar',
         }
