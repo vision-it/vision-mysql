@@ -4,6 +4,9 @@ describe 'vision_mysql::server' do
   context 'with backup' do
     it 'creates backups' do
       pp = <<-FILE
+        user { 'nagios':
+          ensure => present,
+        }
         file { '/vision':
           ensure => directory,
         }
