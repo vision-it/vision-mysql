@@ -11,7 +11,6 @@ describe 'vision_mysql::mariadb' do
       FILE
 
       apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
     end
   end
 
