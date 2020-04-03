@@ -35,9 +35,6 @@ describe 'vision_mysql::mariadb' do
       its(:content) { is_expected.to match 'wsrep_cluster_address = gcomm://1.example.com,2.example.com' }
       its(:content) { is_expected.to match 'wsrep_sst_method = rsync' }
       its(:content) { is_expected.to match 'wsrep_node_address' }
-      its(:content) { is_expected.to match 'wsrep_provider_options' }
-      its(:content) { is_expected.to match 'VisionCA' }
-      its(:content) { is_expected.to match 'tkey' }
       its(:content) { is_expected.to match 'bind-address = 0.0.0.0' }
     end
   end
