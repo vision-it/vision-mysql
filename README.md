@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/vision-it/vision-mysql.svg?branch=production)](https://travis-ci.org/vision-it/vision-mysql)
 
-# Upgrading
+## Upgrading MySQL Major Versions
 
 Notes on upgrading MySQL Versions.
 
@@ -12,7 +12,7 @@ Notes on upgrading MySQL Versions.
  - Hint: The packages in the official MySQL repo are called `mysql-community-server`
  - Run `mysql_upgrade`
 
-# Usage
+## Usage
 
 ```
 contain vision_mysql

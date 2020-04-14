@@ -1,14 +1,27 @@
-# Class: vision_mysql
+# Class: vision_mysql::server
 # ===========================
+#
+# Manage MySQL Installation
 #
 # Parameters
 # ----------
+#
+# @param root_password MySQL Root Password
+# @param package_name Apt package name
+# @param monitoring List of Monitoring Users
+# @param backup List of Backup Config
+# @param ldap = Enable LDAP configuration (bool)
+# @param tls  = Enable TLS configuration (bool)
+# @param manage_repo = Use MySQL Apt repository
+# @param server_cert = TLS Certificate
+# @param server_key = TLS Private Key
+# @param ca_cert = TLS CA Certificate
 #
 # Examples
 # --------
 #
 # @example
-# contain ::vision_mysql
+# contain ::vision_mysql::server
 #
 
 class vision_mysql::server (

@@ -1,6 +1,26 @@
 # Class: vision_mysql::mariadb
 # ===========================
 
+# Manage MariaDB Installation
+#
+# Parameters
+# ----------
+#
+# @param root_password MySQL Root Password
+# @param package_name Apt package name
+# @param monitoring List of Monitoring Users
+# @param backup List of Backup Config
+# @param ldap = Enable LDAP configuration (bool)
+# @param tls  = Enable TLS configuration (bool)
+# @param cluster  = Enable Galera configuration (bool)
+# @param cluster_nodes  = List of Galera Nodes
+# @param cluster_name  = Name of Galera Cluster
+# @param manage_repo = Use MySQL Apt repository
+# @param server_cert = TLS Certificate
+# @param server_key = TLS Private Key
+# @param ca_cert = TLS CA Certificate
+#
+
 class vision_mysql::mariadb (
 
   String $root_password,
