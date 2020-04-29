@@ -10,6 +10,9 @@ describe 'vision_mysql::server' do
         file { '/vision':
           ensure => directory,
         }
+        # Generate dummy certs and ca
+            exec { '/bin/bash /etc/puppetlabs/code/modules/vision_bareos/files/testing/gencrt.sh':
+        }
         # Manually start with init, since we aint got so systemd
         if($facts[os][distro][codename] == 'stretch') {
          $p = 'mysql-server'
