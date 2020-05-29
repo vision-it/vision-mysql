@@ -4,6 +4,11 @@ describe 'vision_mysql::mariadb' do
   context 'with cluster' do
     it 'idempotentlies run' do
       pp = <<-FILE
+        # Via vision-groups
+        group { 'ssl-cert':
+          ensure => present,
+        }
+
         class { 'vision_mysql::mariadb':
               root_password => '123456',
               ldap => false,
@@ -17,6 +22,13 @@ describe 'vision_mysql::mariadb' do
       FILE
 
       apply_manifest(pp, catch_failures: true)
+    end
+  end
+
+  context 'user provisioned' do
+    describe user('mysql') do
+      it { should belong_to_group 'mysql' }
+      it { should belong_to_group 'ssl-cert' }
     end
   end
 
@@ -35,6 +47,9 @@ describe 'vision_mysql::mariadb' do
       its(:content) { is_expected.to match 'wsrep_cluster_address = gcomm://1.example.com,2.example.com' }
       its(:content) { is_expected.to match 'wsrep_sst_method = rsync' }
       its(:content) { is_expected.to match 'wsrep_node_address' }
+      its(:content) { is_expected.to match 'wsrep_provider_options' }
+      its(:content) { is_expected.to match 'VisionCA' }
+      its(:content) { is_expected.to match 'tkey' }
       its(:content) { is_expected.to match 'bind-address = 0.0.0.0' }
     end
   end
