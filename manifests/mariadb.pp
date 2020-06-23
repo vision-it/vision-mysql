@@ -88,10 +88,6 @@ class vision_mysql::mariadb (
 
   if $cluster {
     $cluster_override_options = {
-      'sst' => {
-        'tkey'  => "/vision/pki/${::fqdn}.key",
-        'tcert' => "/vision/pki/${::fqdn}.crt",
-      },
       'mysqld' => {
         'wsrep_on'                 => 'ON',
         'wsrep_provider'           => '/usr/lib/galera/libgalera_smm.so',
@@ -100,7 +96,6 @@ class vision_mysql::mariadb (
         'wsrep_sst_method'         => 'rsync',
         'wsrep_node_address'       => $ipaddress,
         'wsrep_replicate_myisam'   => 'ON',
-        'wsrep_provider_options'   => "socket.ssl_key=/vision/pki/${::fqdn}.key;socket.ssl_cert=/vision/pki/${::fqdn}.crt;socket.ssl_ca=/vision/pki/VisionCA.crt",
         'binlog_format'            => 'ROW',
         'default_storage_engine'   => 'innodb',
         'innodb_autoinc_lock_mode' => '2',
@@ -124,12 +119,6 @@ class vision_mysql::mariadb (
       $ssl_override_options,
       $cluster_override_options
       )
-  }
-
-  # Group is managed by vision-groups
-  # User<|title == 'mysql'|> { groups => ['mysql', 'ssl-cert']}
-  user {'mysql':
-    groups => ['mysql', 'ssl-cert']
   }
 
   file { '/etc/logrotate.d/mysql-server':
