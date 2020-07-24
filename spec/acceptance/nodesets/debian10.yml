@@ -7,6 +7,7 @@ HOSTS:
     docker_image_commands:
       - 'apt-get update && apt-get install -y cron locales-all net-tools wget git vim apt-transport-https systemd'
       - 'rm -f /usr/sbin/policy-rc.d'
+      - 'export PATH="$PATH:/opt/puppetlabs/bin" > /root/.bashrc'
 CONFIG:
   trace_limit: 200
   masterless: true

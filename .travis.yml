@@ -24,7 +24,6 @@ matrix:
       services: docker
       sudo: required
     - env: STRICT_VARIABLES="yes" CHECK="beaker" BEAKER_set="debian10"
-      before_script: sh ./buster_fix.sh
       services: docker
       sudo: required
 notifications:
