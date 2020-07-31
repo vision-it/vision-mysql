@@ -1,21 +1,6 @@
 ---
-vision_mysql::mariadb::root_password: 'foobar'
-vision_mysql::mariadb::backup:
-  password: 'backmeup'
-  databases:
-    - 'foobar'
-vision_mysql::server::root_password: 'testserver'
-vision_mysql::server::monitoring:
-  password: 'observer'
-vision_mysql::server::backup:
-  password: 'backmeup'
-  databases:
-    - 'foobar'
-vision_mysql::server::ldap::ldap_uri: 'ldap://uri_geller'
-vision_mysql::server::ldap::bind_dn: 'dc=foobind'
-vision_mysql::server::ldap::bind_password: 'foopassword'
-vision_mysql::server::ldap::base_dn: 'dc=foobase'
-vision_mysql::server::server_cert: >-
+vision_mysql::server::root_password: 'foobar'
+vision_mysql::server::cert: >-
   -----BEGIN CERTIFICATE-----
   MIIDDjCCAfYCAQEwDQYJKoZIhvcNAQELBQAwUzELMAkGA1UEBhMCQVUxEzARBgNV
   BAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0IFdpZGdpdHMgUHR5IEx0
@@ -36,7 +21,7 @@ vision_mysql::server::server_cert: >-
   DjYDgbk3kxy2xa2klnFFZm8M
   -----END CERTIFICATE-----
 
-vision_mysql::server::server_key: >-
+vision_mysql::server::key: >-
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpAIBAAKCAQEA0Ozzp2YEuKXQH/4WMaqVozZ/gbZzYsSE61UisHRpz1Ld5OwB
   0BnuXh1peCrjypHYFedokNJ8B0c6caItr7KTpk6H4F0XWpcpIZu9VtyFUJwu1lWg
@@ -87,7 +72,3 @@ vision_mysql::server::ca_cert: >-
   GcQKBKfuUsBDTeSoQPBzzmDUJ8HsRj3kDkPEmzCUouvDGYZekU4NZXyp92N/VVde
   vF6nWkgKJHIScZ+5tbTSk8Ah3MlOOBAtD2no2RiX3g==
   -----END CERTIFICATE-----
-
-vision_mysql::mariadb::server_cert: 'foobar'
-vision_mysql::mariadb::server_key: 'foobar'
-vision_mysql::mariadb::ca_cert: 'foobar'

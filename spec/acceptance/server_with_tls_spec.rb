@@ -1,19 +1,21 @@
 require 'spec_helper_acceptance'
 
-describe 'vision_mysql::server' do
+describe 'vision_mysql::server with tls' do
   context 'with TLS' do
     it 'idempotentlies run' do
-      pp = <<-FILE
-        # mysql no longer in buster
-        if($facts[os][distro][codename] == 'stretch') {
-         $p = 'mysql-server'
-        } else {
-         $p = 'mariadb-server'
+      setup = <<-FILE
+        package { 'mariadb-server':
+          ensure => present,
+        }->
+          exec { '/bin/cp -p /etc/init.d/mysql /etc/init.d/mariadb':
+        }->
+          exec { '/bin/bash /etc/init.d/mysql start':
         }
+      FILE
+      apply_manifest(setup, accept_all_exit_codes: true, catch_failures: false)
 
+      pp = <<-FILE
         class { 'vision_mysql::server':
-          package_name  => $p,
-          tls => true,
         }
       FILE
 
@@ -34,13 +36,13 @@ describe 'vision_mysql::server' do
       its(:content) { is_expected.to match 'CERTIFICATE' }
     end
 
-    describe file('/etc/mysql/server-cert.pem') do
+    describe file('/etc/mysql/cert.pem') do
       it { is_expected.to be_file }
       it { is_expected.to be_owned_by 'mysql' }
       its(:content) { is_expected.to match 'CERTIFICATE' }
     end
 
-    describe file('/etc/mysql/server-key.pem') do
+    describe file('/etc/mysql/key.pem') do
       it { is_expected.to be_file }
       it { is_expected.to be_mode 600 }
       it { is_expected.to be_owned_by 'mysql' }

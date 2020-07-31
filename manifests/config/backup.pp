@@ -1,6 +1,6 @@
 # Configure regular database dumps
 #
-class vision_mysql::server::backup (
+class vision_mysql::config::backup (
 
   String $password,
   Array $databases,

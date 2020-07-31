@@ -1,2 +1,6 @@
 ---
-vision_mysql::server: True
+lookup_options:
+  'vision_mysql::server::root_password':
+    convert_to: 'Sensitive'
+  'vision_mysql::server::cluster_password':
+    convert_to: 'Sensitive'

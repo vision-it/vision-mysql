@@ -1,6 +1,6 @@
 {
   "name": "vision_mysql",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "vision-it",
   "source": "",
   "summary": "",
@@ -10,7 +10,6 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "9",
         "10"
       ]
     }

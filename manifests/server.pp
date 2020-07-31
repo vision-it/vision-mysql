@@ -1,81 +1,48 @@
 # Class: vision_mysql::server
 # ===========================
-#
-# Manage MySQL Installation
-#
-# Parameters
-# ----------
-#
-# @param root_password MySQL Root Password
-# @param package_name Apt package name
-# @param monitoring List of Monitoring Users
-# @param backup List of Backup Config
-# @param ldap = Enable LDAP configuration (bool)
-# @param tls  = Enable TLS configuration (bool)
-# @param manage_repo = Use MySQL Apt repository
-# @param server_cert = TLS Certificate
-# @param server_key = TLS Private Key
-# @param ca_cert = TLS CA Certificate
-#
-# Examples
-# --------
-#
-# @example
-# contain ::vision_mysql::server
-#
+
+# Manage MariaDB Installation
 
 class vision_mysql::server (
 
-  String $root_password,
-  String $package_name = 'mysql-server',
-  Hash   $monitoring   = {},
-  Hash   $backup       = {},
-  Boolean $ldap = false,
-  Boolean $tls  = false,
-  Boolean $manage_repo = false,
-  Optional[String] $server_cert = undef,
-  Optional[String] $server_key = undef,
+  Sensitive[String] $root_password,
+  String $package_name = 'mariadb-server',
+  String $ipaddress = $::ipaddress,
+  # These variables are just for the CI pipeline
+  Boolean $service_manage  = true,
+  Boolean $service_enabled = true,
+  # Cluster
+  Optional[String] $cluster_name = undef,
+  Optional[Array] $cluster_nodes = undef,
+  Optional[Sensitive] $cluster_password = Sensitive(''),
+  # TLS
+  Optional[String] $cert = undef,
+  Optional[String] $key = undef,
   Optional[String] $ca_cert = undef,
 
 ) {
 
-  if $manage_repo {
-    contain vision_mysql::repo::mysql
-  }
-
   $default_override_options = {
-    'client' => {
-      'default-character-set' => 'utf8',
-    },
-    'mysql'  => {
-      'default-character-set' => 'utf8',
-    },
     'mysqld' => {
-      'sql-mode'             => 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
-      'bind-address'         => '0.0.0.0',
-      'collation-server'     => 'utf8_general_ci',
-      'character-set-server' => 'utf8',
-      'init-connect'         => 'SET NAMES utf8',
-    },
-    'mariadb' => {
-      'plugin-load'              => 'auth_pam.so',
-      'pam_use_cleartext_plugin' => true
+      'bind-address' => '0.0.0.0',
+      'sql-mode'     => 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
     }
   }
 
-  if $tls {
-    class { '::vision_mysql::server::tls':
-      server_cert => $server_cert,
-      server_key  => $server_key,
-      ca_cert     => $ca_cert
+  if $key {
+    class { '::vision_mysql::config::tls':
+      cert    => $cert,
+      key     => $key,
+      ca_cert => $ca_cert,
+      require => Class['mysql::server'],
     }
 
     $ssl_override_options = {
       'mysqld' => {
         'ssl'         => true,
         'ssl-ca'      => '/etc/mysql/ca-cert.pem',
-        'ssl-cert'    => '/etc/mysql/server-cert.pem',
-        'ssl-key'     => '/etc/mysql/server-key.pem',
+        'ssl-cert'    => '/etc/mysql/cert.pem',
+        'ssl-key'     => '/etc/mysql/key.pem',
       }
     }
   }
@@ -83,31 +50,60 @@ class vision_mysql::server (
     $ssl_override_options = {}
   }
 
+
+  if $cluster_nodes {
+
+    package { 'mariadb-backup':
+      ensure  => present,
+    }
+
+    mysql_user{ 'mariabackup@%':
+      ensure        => present,
+      password_hash => mysql::password($cluster_password.unwrap),
+      plugin        => 'mysql_native_password',
+    }
+
+    mysql_grant{ 'mariabackup@%/*.*':
+      user       => 'mariabackup@%',
+      table      => '*.*',
+      privileges => ['RELOAD', 'PROCESS', 'LOCK TABLES', 'REPLICATION CLIENT'],
+      require    => Mysql_user['mariabackup@%'],
+    }
+
+    $cluster_override_options = {
+      'mysqld' => {
+        'wsrep_on'                 => 'ON',
+        'wsrep_provider'           => '/usr/lib/galera/libgalera_smm.so',
+        'wsrep_cluster_name'       => $cluster_name,
+        'wsrep_cluster_address'    => "gcomm://${ $cluster_nodes.join(',') }",
+        'wsrep_sst_method'         => 'mariabackup',
+        'wsrep_node_address'       => $ipaddress,
+        'wsrep_sst_auth'           => "mariabackup:${cluster_password.unwrap}",
+        'wsrep_replicate_myisam'   => 'ON',
+        'binlog_format'            => 'ROW',
+        'default_storage_engine'   => 'innodb',
+        'innodb_autoinc_lock_mode' => '2',
+        'innodb_doublewrite'       => '1'
+      }
+    }
+  } else {
+    $cluster_override_options = {}
+  }
+
+  $override_options = deep_merge(
+    $default_override_options,
+    $ssl_override_options,
+    $cluster_override_options
+  )
+
   class { '::mysql::server':
-    root_password           => $root_password,
     package_name            => $package_name,
+    root_password           => $root_password.unwrap,
     remove_default_accounts => true,
     restart                 => true,
-    override_options        => deep_merge($default_override_options, $ssl_override_options),
-  }
-
-  file { '/etc/logrotate.d/mysql-server':
-    ensure  => present,
-    content => template('vision_mysql/mysql-server.logrotate'),
-    require => Class['::mysql::server'],
-  }
-
-  if ! empty($monitoring) {
-    class { '::vision_mysql::server::monitoring':
-      password => $monitoring['password'],
-    }
-  }
-
-  if ! empty($backup) {
-    class { '::vision_mysql::server::backup':
-      password  => $backup['password'],
-      databases => $backup['databases'],
-    }
+    service_manage          => $service_manage,
+    service_enabled         => $service_enabled,
+    override_options        => $override_options,
   }
 
 }
