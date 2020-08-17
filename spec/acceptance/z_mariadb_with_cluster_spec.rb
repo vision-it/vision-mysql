@@ -37,6 +37,7 @@ describe 'vision_mysql::mariadb' do
       its(:content) { is_expected.to match 'wsrep_node_address' }
       its(:content) { is_expected.to match 'bind-address = 0.0.0.0' }
       its(:content) { is_expected.to match 'prompt ='}
+      its(:content) { is_expected.to match ': [\d]> '}
     end
   end
 end
