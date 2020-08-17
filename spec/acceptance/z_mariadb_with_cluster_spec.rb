@@ -36,6 +36,7 @@ describe 'vision_mysql::mariadb' do
       its(:content) { is_expected.to match 'wsrep_sst_method = rsync' }
       its(:content) { is_expected.to match 'wsrep_node_address' }
       its(:content) { is_expected.to match 'bind-address = 0.0.0.0' }
+      its(:content) { is_expected.to match 'prompt =' }
     end
   end
 end

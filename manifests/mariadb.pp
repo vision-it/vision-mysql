@@ -50,6 +50,9 @@ class vision_mysql::mariadb (
     'mysqld' => {
       'bind-address' => '0.0.0.0',
       'sql-mode'     => 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
+    },
+    'client' => {
+      'prompt' => "${::fqdn}: [\\d]> ",
     }
   }
 
