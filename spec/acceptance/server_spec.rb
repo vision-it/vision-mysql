@@ -31,6 +31,11 @@ describe 'vision_mysql::server' do
       it { is_expected.to be_mode 600 }
     end
 
+    describe file('/root/init-db.sh') do
+      it { is_expected.to be_file }
+      it { is_expected.to be_mode 740 }
+    end
+
     describe file('/etc/mysql/my.cnf') do
       it { is_expected.to be_file }
       its(:content) { is_expected.to match 'MANAGED BY PUPPET' }

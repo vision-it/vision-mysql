@@ -106,4 +106,10 @@ class vision_mysql::server (
     override_options        => $override_options,
   }
 
+  file { '/root/init-db.sh':
+    ensure  => present,
+    mode    => '0740',
+    content => file('vision_mysql/init-db.sh'),
+  }
+
 }
