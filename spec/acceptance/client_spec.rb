@@ -3,7 +3,6 @@ require 'spec_helper_acceptance'
 describe 'vision_mysql::client' do
   context 'with cluster' do
     it 'idempotentlies run' do
-      setup = <<-FILE
       pp = <<-FILE
         class { 'vision_mysql::client':
         }
