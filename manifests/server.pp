@@ -60,7 +60,6 @@ class vision_mysql::server (
     mysql_user{ 'mariabackup@%':
       ensure        => present,
       password_hash => mysql::password($cluster_password.unwrap),
-      plugin        => 'mysql_native_password',
     }
 
     mysql_grant{ 'mariabackup@%/*.*':
