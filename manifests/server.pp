@@ -50,7 +50,6 @@ class vision_mysql::server (
     $ssl_override_options = {}
   }
 
-
   if $cluster_nodes {
 
     package { 'mariadb-backup':
@@ -69,9 +68,12 @@ class vision_mysql::server (
       require    => Mysql_user['mariabackup@%'],
     }
 
+    # Turn off clustering when we only have one node, this makes testing easier.
+    if length($cluster_nodes) > 1 { $wsrep_on = 'ON' } else { $wsrep_on = 'OFF' }
+
     $cluster_override_options = {
       'mysqld' => {
-        'wsrep_on'                 => 'ON',
+        'wsrep_on'                 => $wsrep_on,
         'wsrep_provider'           => '/usr/lib/galera/libgalera_smm.so',
         'wsrep_cluster_name'       => $cluster_name,
         'wsrep_cluster_address'    => "gcomm://${ $cluster_nodes.join(',') }",
