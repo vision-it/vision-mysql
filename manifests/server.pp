@@ -1,7 +1,28 @@
 # Class: vision_mysql::server
 # ===========================
-
+#
 # Manage MariaDB Installation
+#
+# Parameters
+# ----------
+#
+# @param root_password Password for root user
+# @param backup_password Password for backup creation user
+# @param package_name Server package name
+# @param ipaddress Bind Address
+# @param cluster_name Name of Galera Cluster (optional)
+# @param cluster_nodes List of Galera Cluster Nodes (optional)
+# @param cluster_password Galera Cluster Replication Password
+# @param cert TLS Certificate (optional)
+# @param key TLS Private Key (optional)
+# @param ca_cert TLS CA Certificate Key (optional)
+#
+# Examples
+# --------
+#
+# @example
+# contain ::vision_mysql::server
+#
 
 class vision_mysql::server (
 
@@ -23,6 +44,7 @@ class vision_mysql::server (
 
 ) {
 
+  # Default options, the rest gets merged with this Hash
   $default_override_options = {
     'mysqld' => {
       'bind-address' => '0.0.0.0',
@@ -30,6 +52,7 @@ class vision_mysql::server (
     }
   }
 
+  # Create TLS config if the TLS private key is provided
   if $key {
     class { '::vision_mysql::config::tls':
       cert    => $cert,
@@ -51,8 +74,10 @@ class vision_mysql::server (
     $ssl_override_options = {}
   }
 
+  # Create Galera config if cluster nodes are provided
   if $cluster_nodes {
 
+    # Used for Replication
     package { 'mariadb-backup':
       ensure  => present,
     }
@@ -85,13 +110,14 @@ class vision_mysql::server (
         'binlog_format'            => 'ROW',
         'default_storage_engine'   => 'innodb',
         'innodb_autoinc_lock_mode' => '2',
-        'innodb_doublewrite'       => '1'
+        'innodb_doublewrite'       => '1',
       }
     }
   } else {
     $cluster_override_options = {}
   }
 
+  # Merging all configs together
   $override_options = deep_merge(
     $default_override_options,
     $ssl_override_options,
@@ -116,6 +142,7 @@ class vision_mysql::server (
     maxallowedpacket  => '16M',
   }
 
+  # Small helper script to create databases and users
   file { '/root/init-db.sh':
     ensure  => present,
     mode    => '0740',
