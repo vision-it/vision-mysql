@@ -6,6 +6,7 @@
 class vision_mysql::server (
 
   Sensitive[String] $root_password,
+  Sensitive[String] $backup_password = Sensitive(fqdn_rand_string(32)),
   String $package_name = 'mariadb-server',
   String $ipaddress = $::ipaddress,
   # These variables are just for the CI pipeline
@@ -105,6 +106,14 @@ class vision_mysql::server (
     service_manage          => $service_manage,
     service_enabled         => $service_enabled,
     override_options        => $override_options,
+  }
+
+  class { '::mysql::server::backup':
+    backupuser        => 'backup',
+    backuppassword    => $backup_password.unwrap,
+    backupdir         => '/root/sql-backup',
+    file_per_database => true,
+    maxallowedpacket  => '16M',
   }
 
   file { '/root/init-db.sh':

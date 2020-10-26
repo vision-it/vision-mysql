@@ -7,5 +7,8 @@ fixtures:
     mysql:
       ref: "v10.6.0"
       repo: "https://github.com/puppetlabs/puppetlabs-mysql"
+    cron_core:
+      ref: "1.0.4"
+      repo: "https://github.com/puppetlabs/puppetlabs-cron_core"
   symlinks:
     vision_mysql: '#{source_dir}'
