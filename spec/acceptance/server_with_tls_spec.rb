@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'vision_mysql::server with tls' do
@@ -51,10 +53,10 @@ describe 'vision_mysql::server with tls' do
 
     describe file('/etc/mysql/my.cnf') do
       it { is_expected.to be_file }
-      its(:content) { is_expected.to match /^ssl$/ }
-      its(:content) { is_expected.to match /^ssl-ca =/ }
-      its(:content) { is_expected.to match /^ssl-cert =/ }
-      its(:content) { is_expected.to match /^ssl-key =/ }
+      its(:content) { is_expected.to match(/^ssl$/) }
+      its(:content) { is_expected.to match(/^ssl-ca =/) }
+      its(:content) { is_expected.to match(/^ssl-cert =/) }
+      its(:content) { is_expected.to match(/^ssl-key =/) }
     end
   end
 
