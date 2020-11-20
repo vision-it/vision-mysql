@@ -1,4 +1,6 @@
 ---
+vision_mysql::server::cluster_name: 'mariadb_cluster'
+
 lookup_options:
   'vision_mysql::server::root_password':
     convert_to: 'Sensitive'
