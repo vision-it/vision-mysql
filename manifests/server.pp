@@ -85,6 +85,7 @@ class vision_mysql::server (
     mysql_user{ 'mariabackup@%':
       ensure        => present,
       password_hash => mysql::password($cluster_password.unwrap),
+      require       => Package['mariadb-backup'],
     }
 
     mysql_grant{ 'mariabackup@%/*.*':
