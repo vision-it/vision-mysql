@@ -6,3 +6,5 @@ lookup_options:
     convert_to: 'Sensitive'
   'vision_mysql::server::cluster_password':
     convert_to: 'Sensitive'
+  'vision_mysql::server::backup_password':
+    convert_to: 'Sensitive'
