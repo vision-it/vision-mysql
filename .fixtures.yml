@@ -2,13 +2,13 @@
 fixtures:
   repositories:
     stdlib:
-      ref: "v6.3.0"
+      ref: "v6.6.0"
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib"
     mysql:
-      ref: "v10.6.0"
+      ref: "v10.10.0"
       repo: "https://github.com/puppetlabs/puppetlabs-mysql"
     cron_core:
-      ref: "1.0.4"
+      ref: "1.0.5"
       repo: "https://github.com/puppetlabs/puppetlabs-cron_core"
   symlinks:
     vision_mysql: '#{source_dir}'
