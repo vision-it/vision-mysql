@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This file is managed by Puppet
 
 # Script to create a new Database and User to access it.
 # The password is a random string that will be displayed via stdout

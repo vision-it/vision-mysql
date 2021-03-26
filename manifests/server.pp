@@ -12,7 +12,7 @@
 # @param ipaddress Bind Address
 # @param cluster_name Name of Galera Cluster (optional)
 # @param cluster_nodes List of Galera Cluster Nodes (optional)
-# @param cluster_password Galera Cluster Replication Password
+# @param cluster_password Galera Cluster Replication Password (optional)
 # @param cert TLS Certificate (optional)
 # @param key TLS Private Key (optional)
 # @param ca_cert TLS CA Certificate Key (optional)
@@ -135,6 +135,7 @@ class vision_mysql::server (
     override_options        => $override_options,
   }
 
+  # Creates daily mysqldump
   class { '::mysql::server::backup':
     backupuser        => 'backup',
     backuppassword    => $backup_password.unwrap,
